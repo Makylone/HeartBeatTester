@@ -11,7 +11,7 @@ public class Main {
             for (String url : args) {
                 HeartBeatController heartBeatController = new HeartBeatController();
                 StatusReponse sr = heartBeatController.sendHearbeats(url);
-                System.out.println(sr.Status() + " " + sr.url());
+                System.out.println(sr.status() + " " + sr.url() + " " + sr.responseTime() + "ms");
             }
            
         }
