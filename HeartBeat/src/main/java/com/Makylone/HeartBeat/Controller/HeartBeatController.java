@@ -5,22 +5,22 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.concurrent.TimeUnit;
 
 import com.Makylone.HeartBeat.Model.StatusReponse;
+import com.Makylone.HeartBeat.Utils.ResponseTimeHandler;
 
 public class HeartBeatController {
+
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
+
     public StatusReponse sendHearbeats(String url) throws IOException, InterruptedException{
-        
-        HttpClient client = HttpClient.newHttpClient();
-        long startTime = System.nanoTime();
+        long startTime = ResponseTimeHandler.start();
         HttpRequest request = HttpRequest.newBuilder()
                                             .uri(URI.create(url))
                                             .GET()
                                             .build();
-        HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        long elapsedTime  =  System.nanoTime() - startTime;
-        long responseTime = TimeUnit.NANOSECONDS.toMillis(elapsedTime);
+        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+        long responseTime = ResponseTimeHandler.stop(startTime);
         return new StatusReponse(response.statusCode(), url, responseTime);
     }
 }
